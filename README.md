@@ -34,7 +34,7 @@ List<LocalDateTime> birthdays.stream()
                              .map(eitherDateOrLocalDateTime.fold(
                                 (Date deprecatedDOB)   -> myFunctionToConvertDateToLocalDateTime(deprecatedDOB),
                                 (LocalDatetime newDOB) -> newDOB
-                             ).collect(Collectors.toList());
+                             )).collect(Collectors.toList());
 ```
 
 Boom. Now you have a list of LocalDateTimes, and it's explicit from the code that some of the people had deprecated
