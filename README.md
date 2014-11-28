@@ -14,12 +14,12 @@ But sometimes you want to be REALLY EXPLICIT about the possible types of objects
 
 For example, let's say I'm dealing with my code and some third-party library that still uses `java.util.Date`. Terrible,
  I know, but there are always *those people*. I don't want to further propagate their usage of a terrible deprecated
- class, so I use java.time.LocalDateTime in my code.
+ class, so I use `java.time.LocalDateTime` in my code.
 
-Except great, now I've gotta deal with grabbing a List<LocalDateTime> from *these* and a List<Date> from *those* and
+Except great, now I've gotta deal with grabbing a `List<LocalDateTime>` from *these* and a `List<Date>` from *those* and
 then do a bunch of gnarly conversion everywhere.
 
-I could instead just get a List<Either<Date,LocalDatetime>>. This tells me (and the compiler) that I'm dealing with a
+I could instead just get a `List<Either<Date,LocalDatetime>>1. This tells me (and the compiler) that I'm dealing with a
 bunch of things that are *either* a Date (yuck) or a LocalDateTime.
 
 I can even nicely convert them all into LocalDateTimes:
