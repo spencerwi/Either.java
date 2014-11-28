@@ -46,9 +46,7 @@ The convention in the Haskell world (from which I totally "borrowed" the Either)
 "either the Right answer or whatever's Left" -- that is, errors on the left, expected output on the right.
 
 For this reason, this Either is right-biased; if you give it `Either.either(()->42, ()->"Hello, World!");`, you'll get a
-`Right` containing `"Hello, World!"`, not a `Left` containing `42`. I swear, it's not a political thing; you just need
- to define a predictable rule-of-thumb for how to handle it when the Either gets *both* a left value *and* a right value
- (after all, it's called an *Either*, not a *Both*).
+`Right` containing `"Hello, World!"`, not a `Left` containing `42`. I swear, it's not a political thing; there just needs to be a predictable rule-of-thumb for how to handle it when the Either gets *both* a left value *and* a right value (after all, it's called an *Either*, not a *Both*).
 
 
 So what else can it do?
