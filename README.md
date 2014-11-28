@@ -19,7 +19,7 @@ For example, let's say I'm dealing with my code and some third-party library tha
 Except great, now I've gotta deal with grabbing a `List<LocalDateTime>` from *these* and a `List<Date>` from *those* and
 then do a bunch of gnarly conversion everywhere.
 
-I could instead just get a `List<Either<Date,LocalDatetime>>1. This tells me (and the compiler) that I'm dealing with a
+I could instead just get a `List<Either<Date,LocalDatetime>>`. This tells me (and the compiler) that I'm dealing with a
 bunch of things that are *either* a Date (yuck) or a LocalDateTime.
 
 I can even nicely convert them all into LocalDateTimes:
