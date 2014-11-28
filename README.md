@@ -1,7 +1,7 @@
 Either.java
 ===========
 
-A right-biased implementation of `Either a b` for Java, using Java 8 for mapping/folding and type inference.
+A right-biased implementation of Haskell's `Either a b` for Java, using Java 8 for mapping/folding and type inference.
 
 Wait, what?
 ------------
