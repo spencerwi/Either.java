@@ -1,11 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 
-group = 'com.github.spencerwi'
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-version = '1.0'
 
 repositories {
     mavenCentral()
