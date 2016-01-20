@@ -1,6 +1,8 @@
 Either.java
 ===========
 
+[![Build Status](https://travis-ci.org/spencerwi/Either.java.svg?branch=master)](https://travis-ci.org/spencerwi/Either.java)
+
 A right-biased implementation of Haskell's `Either a b` for Java, using Java 8 for mapping/folding and type inference.
 
 Wait, what?
