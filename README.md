@@ -57,3 +57,17 @@ So what else can it do?
 Wanna see more? Check out the unit tests for a run-down of how Eithers behave. If those tests aren't descriptive enough,
  or you think they should behave differently, open a Github issue! I built this because it didn't look like anyone else
  had built it for Java yet, and I may have lost something in the translation. I'm totally open for feedback.
+
+
+Cool! How do I get it for my project?
+-------------------------------------
+
+Simple! It's in Maven Central, so just add this to your pomfile (or the equivalent for gradle/sbt/lein/whatever):
+
+```
+<dependency>
+    <groupId>com.spencerwi</groupId>
+    <artifactId>Either.java</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
