@@ -50,6 +50,16 @@ The convention in the Haskell world (from which I totally "borrowed" the Either)
 For this reason, this Either is right-biased; if you give it `Either.either(()->42, ()->"Hello, World!");`, you'll get a
 `Right` containing `"Hello, World!"`, not a `Left` containing `42`. I swear, it's not a political thing; there just needs to be a predictable rule-of-thumb for how to handle it when the Either gets *both* a left value *and* a right value (after all, it's called an *Either*, not a *Both*).
 
+Because this errors-to-the-left, results-to-the-right idiom is so common, this library also includes a `Result<T>` class, 
+which instead of being `Left<L,R>` or `Right<L,R>` is `Err<T>` or `Ok<T>`. Instead of `Either.either(() -> "left",  () -> 42)`,
+the constructor method you'll want is `Result.attempt(() -> someMethodThatMightThrowAnException())`. You can even chain
+a series of possibly-failing functions using `flatMap`:
+
+```java
+Result<C> = Result.attempt(() -> someOperationThatMightFailOrReturnA())
+                        .flatMap(a -> someOtherOperationThatMightFailOReturnB(a))
+                        .flatMap(b -> someThirdOperationThatMightFailOrReturnC(b));
+```
 
 So what else can it do?
 -----------------------
@@ -68,6 +78,6 @@ Simple! It's in Maven Central, so just add this to your pomfile (or the equivale
 <dependency>
     <groupId>com.spencerwi</groupId>
     <artifactId>Either.java</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
 </dependency>
 ```
