@@ -1,3 +1,10 @@
 language: java
 jdk:
     - oraclejdk8
+env:
+  global:
+  - secure: PFI6yZ/7gtGdkCwZ7EkMHsaj3JzPOEal46GmToJUNkU6/RUqd+DlU+Bv9WCGF7GB5groXtssey3ukUZRBskFX4RhLO/RMFmvFyyWzMBLCqqwxBJassZohKL6HH/oWsG0xlnWfInjqlvbFFgLwH8yeiJZpnAugpHlzmU9WLy2z8Y=
+  - secure: WUjygOPgtYDPB/oQ4U9S7lTNdrFWQzwVI8ucDXZuG4QWdii4BFeUBBv8vXrdU4K/+zVCvRMVTl++y2Yp46+OcULFAQZFq9E5J4mKszd8HIm7s+K7NN/iAleuDclQArP19tHWQ9MezkA4qoia4qmNZIZoJkXp0/UvahmtHLXl4dQ=
+  - secure: IFvgIBu/IS9kwy7iv91Jo/dnCJBotJm+8+4YNY6l9EW+AYo9zERHCE0o1iC++jaym+PngI4NlrolaHuxHvsslLVgKNHapKoGTZyZDt7OC4cSEla7p50hNHM2JWrUht95DnHDSMkf+OBHeKs7Cn9ojXd1T3RW2GLePAZ38zFXsag=
+  - ORG_GRADLE_PROJECT_isTravis=true
+~
