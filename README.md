@@ -57,8 +57,8 @@ a series of possibly-failing functions using `flatMap`:
 
 ```java
 Result<C> = Result.attempt(() -> someOperationThatMightFailOrReturnA())
-                        .flatMap(a -> someOtherOperationThatMightFailOReturnB(a))
-                        .flatMap(b -> someThirdOperationThatMightFailOrReturnC(b));
+                  .flatMap(a -> someOtherOperationThatMightFailOReturnB(a))
+                  .flatMap(b -> someThirdOperationThatMightFailOrReturnC(b));
 ```
 
 So what else can it do?
