@@ -3,6 +3,7 @@ package com.spencerwi.either;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 public abstract class Either<L, R> {
     protected L leftValue;
@@ -28,6 +29,7 @@ public abstract class Either<L, R> {
 
     public abstract <T> T fold(Function<L,T> transformLeft, Function<R,T> transformRight);
     public abstract <T,U> Either<T,U> map(Function<L,T> transformLeft, Function<R,U> transformRight);
+    public abstract void run(Consumer<L> runLeft, Consumer<R> runRight);
 
     public static class Left<L,R> extends Either<L, R> {
         private Left(L left) {
@@ -54,6 +56,11 @@ public abstract class Either<L, R> {
         public <T, U> Either<T, U> map(Function<L, T> transformLeft, Function<R, U> transformRight) {
             return Either.<T,U>left(transformLeft.apply(this.leftValue));
         }
+        @Override
+        public void run(Consumer<L> runLeft, Consumer<R> runRight) {
+            runLeft.accept(this.leftValue);
+        }
+
 
         @Override
         public int hashCode(){ return this.leftValue.hashCode(); }
@@ -89,6 +96,16 @@ public abstract class Either<L, R> {
             return transformRight.apply(this.rightValue);
         }
         @Override
+        public <T, U> Either<T, U> map(Function<L, T> transformLeft, Function<R, U> transformRight) {
+            return Either.<T,U>right(transformRight.apply(this.rightValue));
+        }
+        @Override
+        public void run(Consumer<L> runLeft, Consumer<R> runRight) {
+            runRight.accept(this.rightValue);
+        }
+
+
+        @Override
         public int hashCode(){ return this.rightValue.hashCode(); }
         @Override
         public boolean equals(Object other){
@@ -100,9 +117,5 @@ public abstract class Either<L, R> {
             }
         }
 
-        @Override
-        public <T, U> Either<T, U> map(Function<L, T> transformLeft, Function<R, U> transformRight) {
-            return Either.<T,U>right(transformRight.apply(this.rightValue));
-        }
     }
 }

@@ -83,6 +83,18 @@ public class EitherTest {
             assertThat(result.getLeft()).isEqualTo("TEST");
         }
         @Test
+        public void runsLeftConsumer_WhenRunIsCalled(){
+            Either<String, Integer> leftOnly = Either.left("test");
+            WrapperAroundBoolean leftHasBeenRun = new WrapperAroundBoolean(false);
+            
+            leftOnly.run( 
+                left  -> { leftHasBeenRun.set(true); },
+                right -> { /* no-op */ }
+            );
+
+            assertThat(leftHasBeenRun.get()).isEqualTo(true);
+        }
+        @Test
         public void isEqualToOtherLeftsHavingTheSameLeftValue(){
             Either<String,Integer> leftIsTest = Either.left("test");
             Either<String,Object> leftIsAlsoTest = Either.left("test");
@@ -168,6 +180,18 @@ public class EitherTest {
             assertThat(result.getRight()).isEqualTo(42*2);
         }
         @Test
+        public void runsRightConsumer_WhenRunIsCalled(){
+            Either<String, Integer> rightOnly = Either.right(42);
+            WrapperAroundBoolean rightHasBeenRun = new WrapperAroundBoolean(false);
+            
+            rightOnly.run( 
+                left  -> { /* no-op */ },
+                right -> { rightHasBeenRun.set(true);  }
+            );
+
+            assertThat(rightHasBeenRun.get()).isEqualTo(true);
+        }
+        @Test
         public void isEqualToOtherRightsHavingTheSameRightValue(){
             Either<String,Integer> rightIs42 = Either.right(42);
             Either<Object,Integer> rightIsAlso42 = Either.right(42);
@@ -194,5 +218,13 @@ public class EitherTest {
 
             assertThat(rightOnly.hashCode()).isEqualTo(rightOnly.getRight().hashCode());
         }
+    }
+
+    public static class WrapperAroundBoolean {
+        private boolean value; 
+        public WrapperAroundBoolean(){ this.value = false; }
+        public WrapperAroundBoolean(boolean value) { this.value = value; }
+        public void set(boolean value){ this.value = value; }
+        public boolean get(){ return this.value; }
     }
 }
