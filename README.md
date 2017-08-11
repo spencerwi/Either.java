@@ -78,6 +78,6 @@ Simple! It's in Maven Central, so just add this to your pomfile (or the equivale
 <dependency>
     <groupId>com.spencerwi</groupId>
     <artifactId>Either.java</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.1</version>
 </dependency>
 ```
