@@ -6,8 +6,6 @@ import java.util.function.Supplier;
 import java.util.function.Consumer;
 
 public abstract class Either<L, R> {
-    protected L leftValue;
-    protected R rightValue;
 
     public static <L,R> Either<L,R> either(Supplier<L> leftSupplier, Supplier<R> rightSupplier){
         R rightValue = rightSupplier.get();
@@ -32,9 +30,11 @@ public abstract class Either<L, R> {
     public abstract void run(Consumer<L> runLeft, Consumer<R> runRight);
 
     public static class Left<L,R> extends Either<L, R> {
+
+        protected L leftValue;
+
         private Left(L left) {
             this.leftValue = left;
-            this.rightValue = null;
         }
 
         @Override
@@ -76,8 +76,10 @@ public abstract class Either<L, R> {
 
     }
     public static class Right<L,R> extends Either<L, R> {
+
+        protected R rightValue;
+
         private Right(R right) {
-            this.leftValue = null;
             this.rightValue = right;
         }
 
