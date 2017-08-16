@@ -53,12 +53,12 @@ For this reason, this Either is right-biased; if you give it `Either.either(()->
 Because this errors-to-the-left, results-to-the-right idiom is so common, this library also includes a `Result<T>` class, 
 which instead of being `Left<L,R>` or `Right<L,R>` is `Err<T>` or `Ok<T>`. Instead of `Either.either(() -> "left",  () -> 42)`,
 the constructor method you'll want is `Result.attempt(() -> someMethodThatMightThrowAnException())`. You can even chain
-a series of possibly-failing functions using `flatMap`:
+a series of possibly-failing functions using `map`:
 
 ```java
 Result<C> = Result.attempt(() -> someOperationThatMightFailOrReturnA())
-                  .flatMap(a -> someOtherOperationThatMightFailOReturnB(a))
-                  .flatMap(b -> someThirdOperationThatMightFailOrReturnC(b));
+                  .map(a -> someOtherOperationThatMightFailOReturnB(a))
+                  .map(b -> someThirdOperationThatMightFailOrReturnC(b));
 ```
 
 So what else can it do?
@@ -78,6 +78,6 @@ Simple! It's in Maven Central, so just add this to your pomfile (or the equivale
 <dependency>
     <groupId>com.spencerwi</groupId>
     <artifactId>Either.java</artifactId>
-    <version>1.2.1</version>
+    <version>2.0.0</version>
 </dependency>
 ```

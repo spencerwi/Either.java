@@ -5,8 +5,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class Result<R> {
-    protected Exception leftValue;
-    protected R rightValue;
 
     public static <R> Result<R> attempt(ExceptionThrowingSupplier<R> resultSupplier){
         try {
@@ -28,12 +26,12 @@ public abstract class Result<R> {
 
     public abstract <T> T fold(Function<Exception,T> transformException, Function<R,T> transformValue);
     public abstract <T> Result<T> map(Function<R,T> transformValue);
-    public abstract <T> Result<T> flatMap(ExceptionThrowingFunction<R,T> transformValue);
+    public abstract <T> Result<T> flatMap(ExceptionThrowingFunction<R, Result<T>> transformValue);
 
     public static class Err<R> extends Result<R> {
+        private Exception leftValue;
         private Err(Exception e) {
             this.leftValue = e;
-            this.rightValue = null;
         }
 
         @Override
@@ -56,7 +54,7 @@ public abstract class Result<R> {
             return Result.<T>err(this.leftValue);
         }
         @Override
-        public <T> Result<T> flatMap(ExceptionThrowingFunction<R, T> transformValue) {
+        public <T> Result<T> flatMap(ExceptionThrowingFunction<R, Result<T>> transformValue) {
             return Result.<T>err(this.leftValue);
         }
 
@@ -74,8 +72,8 @@ public abstract class Result<R> {
 
     }
     public static class Ok<R> extends Result<R> {
+        private R rightValue;
         private Ok(R value) {
-            this.leftValue = null;
             this.rightValue = value;
         }
 
@@ -110,8 +108,12 @@ public abstract class Result<R> {
             return Result.ok(transformValue.apply(this.rightValue));
         }
         @Override
-        public <T> Result<T> flatMap(ExceptionThrowingFunction<R, T> transformValue) {
-            return Result.attempt(() -> transformValue.apply(this.rightValue));
+        public <T> Result<T> flatMap(ExceptionThrowingFunction<R, Result<T>> transformValue) {
+            try {
+                return transformValue.apply(this.rightValue);
+            } catch(Exception e) {
+                return new Err<T>(e);
+            }
         }
     }
 }

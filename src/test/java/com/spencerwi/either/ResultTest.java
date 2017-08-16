@@ -82,6 +82,15 @@ public class ResultTest {
             assertThat(result.getException()).hasMessageContaining("Error! Failed!");
         }
         @Test
+        public void doesNotModifyException_whenFlatMapped(){
+            Result<Integer> errOnly = Result.err(new RuntimeException("Error! Failed!"));
+
+            Result<Integer> result = errOnly.flatMap((valueSide) -> Result.ok(valueSide * 2));
+
+            assertThat(result).isInstanceOf(Result.Err.class);
+            assertThat(result.getException()).hasMessageContaining("Error! Failed!");
+        }
+        @Test
         public void isEqualToOtherErrsHavingTheSameErrValue(){
             RuntimeException ex = new RuntimeException("Test");
             Result<Integer> errIsTest = Result.err(ex);
@@ -160,6 +169,15 @@ public class ResultTest {
             Result<Integer> ok = Result.ok(42);
 
             Result<Integer> okTimes2 = ok.map(result -> result * 2);
+
+            assertThat(okTimes2).isInstanceOf(Result.Ok.class);
+            assertThat(okTimes2.getResult()).isEqualTo(42*2);
+        }
+        @Test
+        public void correctlyFlattens_whenFlatMapped(){
+            Result<Integer> ok = Result.ok(42);
+
+            Result<Integer> okTimes2 = ok.flatMap(result -> Result.ok(result * 2));
 
             assertThat(okTimes2).isInstanceOf(Result.Ok.class);
             assertThat(okTimes2.getResult()).isEqualTo(42*2);

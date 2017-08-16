@@ -1,3 +1,8 @@
+2.0.0
+-----
+
+* Fixed type signature of Result's `flatMap` function (should be accept an `A -> Result<B>` and return a `Result<B>`)
+
 1.2.1
 -----
 
