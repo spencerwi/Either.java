@@ -4,6 +4,7 @@ package com.spencerwi.either;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -208,6 +209,13 @@ public class ResultTest {
             Result<Integer> resultOnly = Result.ok(42);
 
             assertThat(resultOnly.hashCode()).isEqualTo(resultOnly.getResult().hashCode());
+        }
+        @Test
+        public void mapToErr() {
+            Result<?> result = Result.attempt(() -> null)
+                    .map(Objects::requireNonNull);
+            assertThat(result.isErr()).isTrue();
+            assertThat(result.getException()).isInstanceOf(NullPointerException.class);
         }
     }
 }
