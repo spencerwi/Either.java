@@ -2,7 +2,6 @@ package com.spencerwi.either;
 
 import java.util.NoSuchElementException;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public abstract class Result<R> {
 
@@ -25,7 +24,7 @@ public abstract class Result<R> {
     public abstract boolean isOk();
 
     public abstract <T> T fold(Function<Exception,T> transformException, Function<R,T> transformValue);
-    public abstract <T> Result<T> map(Function<R,T> transformValue);
+    public abstract <T> Result<T> map(ExceptionThrowingFunction<R,T> transformValue);
     public abstract <T> Result<T> flatMap(ExceptionThrowingFunction<R, Result<T>> transformValue);
 
     public static class Err<R> extends Result<R> {
@@ -50,7 +49,7 @@ public abstract class Result<R> {
         }
 
         @Override
-        public <T> Result<T> map(Function<R, T> transformRight) {
+        public <T> Result<T> map(ExceptionThrowingFunction<R, T> transformRight) {
             return Result.<T>err(this.leftValue);
         }
         @Override
@@ -104,8 +103,8 @@ public abstract class Result<R> {
         }
 
         @Override
-        public <T> Result<T> map(Function<R, T> transformValue) {
-            return Result.ok(transformValue.apply(this.rightValue));
+        public <T> Result<T> map(ExceptionThrowingFunction<R, T> transformValue) {
+            return Result.attempt(() -> transformValue.apply(this.rightValue));
         }
         @Override
         public <T> Result<T> flatMap(ExceptionThrowingFunction<R, Result<T>> transformValue) {
