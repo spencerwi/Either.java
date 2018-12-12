@@ -1,3 +1,7 @@
+2.1.0
+-----
+* Merge @sfesenko's fix to Result's `map` function where it didn't use `attempt` to "wrap" exceptions.
+
 2.0.0
 -----
 
