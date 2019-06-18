@@ -39,6 +39,14 @@ artifacts {
     archives sourcesJar
 }
 
+// Allow using buildscans
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+}
+
+
+
 if (project.hasProperty('isTravis') == false){
     signing {
         sign configurations.archives
