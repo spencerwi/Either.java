@@ -4,9 +4,6 @@
 build/
 
 
-# Allow gradle wrapper
-!gradle*.jar
-
 # Ignore Gradle GUI config
 gradle-app.setting
 
@@ -20,6 +17,10 @@ gradle-app.setting
 *.jar
 *.war
 *.ear
+
+# Allow gradle wrapper
+!gradle*.jar
+
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
