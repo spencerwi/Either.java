@@ -2,8 +2,8 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 group = 'com.spencerwi'
 archivesBaseName = 'Either.java'
 version = '2.1.0'
@@ -13,8 +13,13 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-    testCompile group: 'org.assertj', name:'assertj-core', version:'1.7.0'
+    testCompile group: 'org.assertj', name:'assertj-core', version:'3.9.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc){

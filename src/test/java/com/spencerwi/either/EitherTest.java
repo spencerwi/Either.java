@@ -1,6 +1,6 @@
 package com.spencerwi.either;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 
@@ -207,7 +207,7 @@ public class EitherTest {
         }
         @Test
         public void isNotEqualToObjectsOfOtherClasses_obviously(){
-            Integer fortyTwo = new Integer(42);
+            Integer fortyTwo = 42;
             Either<String,Integer> rightIs42 = Either.right(fortyTwo);
 
             assertThat(rightIs42).isNotEqualTo(fortyTwo);

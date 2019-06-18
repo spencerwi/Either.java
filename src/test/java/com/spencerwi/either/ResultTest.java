@@ -1,7 +1,7 @@
 
 package com.spencerwi.either;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -199,7 +199,7 @@ public class ResultTest {
         }
         @Test
         public void isNotEqualToObjectsOfOtherClasses_obviously(){
-            Integer fortyTwo = new Integer(42);
+            Integer fortyTwo = 42;
             Result<Integer> resultIs42 = Result.ok(fortyTwo);
 
             assertThat(resultIs42).isNotEqualTo(fortyTwo);
