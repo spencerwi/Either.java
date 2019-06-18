@@ -36,6 +36,8 @@ task sourcesJar(type: Jar){
 
 def customizePom(pom, gradleProject) {
 	pom.withXml { 
+        def root = asNode()
+
 		// modify POM and add optional flag where needed
 		root.dependencies.'*'.findAll {
 			ext.artifactId = it.artifactId.text()
