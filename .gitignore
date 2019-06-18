@@ -4,6 +4,8 @@
 build/
 
 
+# Allow gradle wrapper
+!gradle*.jar
 
 # Ignore Gradle GUI config
 gradle-app.setting
