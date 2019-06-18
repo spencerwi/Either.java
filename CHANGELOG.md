@@ -1,3 +1,9 @@
+2.1.1
+-----
+ * Upgrade tests to use JUnit 5
+ * Include gradle wrapper for more-deterministic builds in CI
+ * Ensure CI pipeline builds on jdk8 and jdk11
+
 2.1.0
 -----
 * Merge @sfesenko's fix to Result's `map` function where it didn't use `attempt` to "wrap" exceptions.
