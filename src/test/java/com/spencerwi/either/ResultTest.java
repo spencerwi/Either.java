@@ -1,12 +1,15 @@
 
 package com.spencerwi.either;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class ResultTest {
 
@@ -19,7 +22,7 @@ public class ResultTest {
 
     @Test
     public void attempt_WhenSupplierThrows_WrapsException(){
-        RuntimeException ex = new RuntimeException("Error! Failed!");
+        Exception ex = new Exception("Error! Failed!");
         Result<Integer> failed = Result.attempt(()->{
             throw ex;
         });
@@ -28,24 +31,26 @@ public class ResultTest {
         assertThat(failed.getException()).isEqualTo(ex);
     }
 
-    public static class ResultErrTest {
+    @Nested
+    @DisplayName("Result.Err")
+    public class ResultErrTest {
         @Test
         public void canBeBuiltAsErr(){
-            Result<Integer> errOnly = Result.err(new RuntimeException("Error! Failed!"));
+            Result<Integer> errOnly = Result.err(new Exception("Error! Failed!"));
 
             assertThat(errOnly).isInstanceOf(Result.Err.class);
         }
 
         @Test
         public void returnsExceptionWhenAsked(){
-            RuntimeException ex = new RuntimeException("Error! Failed!");
+            Exception ex = new Exception("Error! Failed!");
             Result<Integer> errOnly = Result.err(ex);
 
             assertThat(errOnly.getException()).isEqualTo(ex);
         }
         @Test
         public void throwsWhenAskedForResult(){
-            Result<Integer> errOnly = Result.err(new RuntimeException("Error! Failed!"));
+            Result<Integer> errOnly = Result.err(new Exception("Error! Failed!"));
 
             try {
                 errOnly.getResult();
@@ -56,7 +61,7 @@ public class ResultTest {
 
         @Test
         public void identifiesAsErrAndNotAsOk(){
-            Result<Integer> errOnly = Result.err(new RuntimeException("Error! Failed!"));
+            Result<Integer> errOnly = Result.err(new Exception("Error! Failed!"));
 
             assertThat(errOnly.isErr()).isTrue();
             assertThat(errOnly.isOk()).isFalse();
@@ -64,7 +69,7 @@ public class ResultTest {
 
         @Test
         public void executesErrTransformation_whenFolded(){
-            Result<Integer> errOnly = Result.err(new RuntimeException("Error! Failed!"));
+            Result<Integer> errOnly = Result.err(new Exception("Error! Failed!"));
 
             String result = errOnly.fold(
                 errSide   -> errSide.getMessage(),
@@ -75,7 +80,7 @@ public class ResultTest {
         }
         @Test
         public void doesNotModifyException_whenMapped(){
-            Result<Integer> errOnly = Result.err(new RuntimeException("Error! Failed!"));
+            Result<Integer> errOnly = Result.err(new Exception("Error! Failed!"));
 
             Result<Integer> result = errOnly.map((valueSide) -> valueSide * 2);
 
@@ -84,7 +89,7 @@ public class ResultTest {
         }
         @Test
         public void doesNotModifyException_whenFlatMapped(){
-            Result<Integer> errOnly = Result.err(new RuntimeException("Error! Failed!"));
+            Result<Integer> errOnly = Result.err(new Exception("Error! Failed!"));
 
             Result<Integer> result = errOnly.flatMap((valueSide) -> Result.ok(valueSide * 2));
 
@@ -93,7 +98,7 @@ public class ResultTest {
         }
         @Test
         public void isEqualToOtherErrsHavingTheSameErrValue(){
-            RuntimeException ex = new RuntimeException("Test");
+            Exception ex = new Exception("Test");
             Result<Integer> errIsTest = Result.err(ex);
             Result<Object> errIsAlsoTest = Result.err(ex);
 
@@ -101,27 +106,29 @@ public class ResultTest {
         }
         @Test
         public void isNotEqualToOtherErrsHavingDifferentValues(){
-            Result<Integer> errIsHello = Result.err(new RuntimeException("hello"));
-            Result<Integer> errIsWorld = Result.err(new RuntimeException("world"));
+            Result<Integer> errIsHello = Result.err(new Exception("hello"));
+            Result<Integer> errIsWorld = Result.err(new Exception("world"));
 
             assertThat(errIsHello).isNotEqualTo(errIsWorld);
         }
         @Test
         public void isNotEqualToObjectsOfOtherClasses_obviously(){
             String hello = "hello";
-            Result<Integer> errIsHello = Result.err(new RuntimeException(hello));
+            Result<Integer> errIsHello = Result.err(new Exception(hello));
 
             assertThat(errIsHello).isNotEqualTo(hello);
         }
         @Test
         public void hasSameHashCodeAsWrappedException(){
-            Result<Integer> errOnly = Result.err(new RuntimeException("Test"));
+            Result<Integer> errOnly = Result.err(new Exception("Test"));
 
             assertThat(errOnly.hashCode()).isEqualTo(errOnly.getException().hashCode());
         }
     }
 
-    public static class ResultOkTest {
+    @Nested
+    @DisplayName("Result.Ok")
+    public class ResultOkTest {
         @Test
         public void canBeBuiltAsOk(){
             Result<Integer> ok = Result.ok(42);

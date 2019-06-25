@@ -1,5 +1,7 @@
 package com.spencerwi.either;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
@@ -26,7 +28,9 @@ public class EitherTest {
         assertThat(bothSupplied).isInstanceOf(Either.Right.class);
     }
 
-    public static class EitherLeftTest {
+    @Nested
+    @DisplayName("Either.Left")
+    public class EitherLeftTest {
         @Test
         public void canBeBuiltAsLeft(){
             Either<String, Integer> leftOnly = Either.left("test");
@@ -123,7 +127,9 @@ public class EitherTest {
         }
     }
 
-    public static class EitherRightTest {
+    @Nested
+    @DisplayName("Either.Right")
+    public class EitherRightTest {
         @Test
         public void canBeBuiltAsRight(){
             Either<String, Integer> rightOnly = Either.right(42);
