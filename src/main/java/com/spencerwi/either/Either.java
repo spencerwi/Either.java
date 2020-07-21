@@ -29,10 +29,17 @@ public abstract class Either<L, R> {
     public abstract <T,U> Either<T,U> map(Function<L,T> transformLeft, Function<R,U> transformRight);
     public abstract void run(Consumer<L> runLeft, Consumer<R> runRight);
 
-    public <R2> Either<L,R2> map(Function<R,R2> transformRight) {
+    public <L2> Either<L2,R> mapLeft(Function<L,L2> transformLeft) {
+        return map(transformLeft, Function.identity());
+    }
+
+    public <R2> Either<L,R2> mapRight(Function<R,R2> transformRight) {
         return map(Function.identity(), transformRight);
     }
-    public abstract <R2> Either<L, R2> flatMap(Function<R, Either<L,R2>> transformRight);
+
+    public abstract <L2> Either<L2, R> flatMapLeft(Function<L, Either<L2,R>> transformLeft);
+
+    public abstract <R2> Either<L, R2> flatMapRight(Function<R, Either<L,R2>> transformRight);
 
     public static class Left<L,R> extends Either<L, R> {
 
@@ -67,7 +74,12 @@ public abstract class Either<L, R> {
         }
 
         @Override
-        public <R2> Either<L, R2> flatMap(Function<R, Either<L,R2>> transformRight) {
+        public <L2> Either<L2, R> flatMapLeft(Function<L, Either<L2,R>> transformLeft) {
+            return transformLeft.apply(leftValue);
+        }
+
+        @Override
+        public <R2> Either<L, R2> flatMapRight(Function<R, Either<L,R2>> transformRight) {
             return Either.left(leftValue);
         }
 
@@ -117,7 +129,12 @@ public abstract class Either<L, R> {
         }
 
         @Override
-        public <R2> Either<L, R2> flatMap(Function<R, Either<L, R2>> transformRight) {
+        public <L2> Either<L2, R> flatMapLeft(Function<L, Either<L2,R>> transformLeft) {
+            return Either.right(rightValue);
+        }
+
+        @Override
+        public <R2> Either<L, R2> flatMapRight(Function<R, Either<L, R2>> transformRight) {
             return transformRight.apply(rightValue);
         }
 

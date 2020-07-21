@@ -8,8 +8,8 @@ class EitherFlatMapTest {
     void eitherFlatMapExample() {
 
         Either<Error, Final> either = eitherStep1(new Request())
-                .flatMap(this::eitherStep2)
-                .map(this::step3);
+                .flatMapRight(this::eitherStep2)
+                .mapRight(this::step3);
     }
 
     @Test
