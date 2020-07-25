@@ -226,6 +226,66 @@ public class EitherTest {
         }
     }
 
+    @Nested
+    @DisplayName("mapRight.and.flatMapRight")
+    public class MapRightTest{
+
+        @Test
+        void mapRightExample() {
+
+            Either<Error, Final> either = eitherStep1(new Request())
+                    .flatMapRight(intermediate -> intermediate.isValid() ?
+                            Either.right(new PreFinal()) : Either.left(new Error("Intermediate is not valid")))
+                    .mapRight(preFinal -> new Final());
+        }
+
+        @Test
+        void mapRightResultEquivalent() {
+
+            Result<Final> result = Result.attempt(() -> step1(new Request()))
+                    .map(intermediate -> intermediate.isValid() ?
+                            Either.right(new PreFinal()) : Either.left(new Error("Intermediate is not valid")))
+                    .map(preFinal -> new Final());
+        }
+
+
+
+        Either<Error, Intermediate> eitherStep1(Request request) {
+            return request.isValid() ? Either.right(new Intermediate()) : Either.left(new Error("Request is not valid"));
+        }
+
+        Intermediate step1(Request request) throws Exception {
+            if (request.isValid()) {
+                return new Intermediate();
+            } else {
+                throw new Exception("Request is not valid");
+            }
+        }
+
+        class Request {
+            boolean isValid() {
+                return true;
+            }
+        }
+
+        class Intermediate {
+            boolean isValid() {
+                return true;
+            }
+        }
+
+        class PreFinal { }
+
+        class Final { }
+
+        class Error {
+            String desc;
+            Error(String desc) {
+                this.desc = desc;
+            }
+        }
+    }
+
     public static class WrapperAroundBoolean {
         private boolean value; 
         public WrapperAroundBoolean(){ this.value = false; }
