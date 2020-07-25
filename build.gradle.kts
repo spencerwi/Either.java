@@ -35,6 +35,12 @@ tasks.register<Jar>("javadocJar"){
     from(tasks.javadoc.get().destinationDir)
 }
 
+buildScan {
+	termsOfServiceUrl = "https://gradle.com/terms-of-service"
+	termsOfServiceAgree = "yes"
+}
+
+
 if (!(project.hasProperty("isTravis"))){
 
     val sonatypeUsername : String by extra
