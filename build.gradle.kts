@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.spencerwi"
-version = "2.1.1"
+version = "2.2.0"
 
 base.archivesBaseName = "Either.java"
 java {

@@ -1,3 +1,7 @@
+2.2.0
+-----
+ * Add `mapLeft`, `mapRight`, `flatMapLeft`, and `flatMapRight` to `Either` (thanks, michaldo!)
+
 2.1.1
 -----
  * Upgrade tests to use JUnit 5
