@@ -156,6 +156,22 @@ public abstract class Either<L, R> {
 	 */
     public abstract <R2> Either<L, R2> flatMapRight(Function<R, Either<L,R2>> transformRight);
 
+    public abstract L getLeftOrElse(L other);
+
+    public abstract L getLeftOrElse(Supplier<L> otherSupplier);
+
+    public abstract <X extends Throwable> L getLeftOrElseThrow(Function<R,X> exceptionFunction) throws X;
+
+    public abstract <X extends Throwable> L getLeftOrElseThrow(Supplier<X> exceptionSupplier) throws X;
+
+    public abstract R getRightOrElse(R other);
+
+    public abstract R getRightOrElse(Supplier<R> otherSupplier);
+
+    public abstract <X extends Throwable> R  getRightOrElseThrow(Function<L,X> exceptionFunction) throws X;
+
+    public abstract <X extends Throwable> R getRightOrElseThrow(Supplier<X> exceptionSupplier) throws X;
+
     public static class Left<L,R> extends Either<L, R> {
 
         protected L leftValue;
@@ -205,6 +221,46 @@ public abstract class Either<L, R> {
         @Override
         public <R2> Either<L, R2> flatMapRight(Function<R, Either<L,R2>> transformRight) {
             return Either.left(leftValue);
+        }
+
+        @Override
+        public L getLeftOrElse(L other) {
+            return leftValue;
+        }
+
+        @Override
+        public  L getLeftOrElse(Supplier<L> otherSupplier) {
+            return leftValue;
+        }
+
+        @Override
+        public <X extends Throwable> L getLeftOrElseThrow(Function<R, X> exceptionFunction) throws X {
+            return leftValue;
+        }
+
+        @Override
+        public <X extends Throwable> L getLeftOrElseThrow(Supplier<X> exceptionSupplier) throws X {
+            return leftValue;
+        }
+
+        @Override
+        public R getRightOrElse(R other) {
+            return other;
+        }
+
+        @Override
+        public R getRightOrElse(Supplier<R> otherSupplier) {
+            return otherSupplier.get();
+        }
+
+        @Override
+        public <X extends Throwable> R getRightOrElseThrow(Function<L, X> exceptionFunction) throws X {
+            throw exceptionFunction.apply(leftValue);
+        }
+
+        @Override
+        public <X extends Throwable> R getRightOrElseThrow(Supplier<X> exceptionSupplier) throws X {
+            throw exceptionSupplier.get();
         }
 
 
@@ -276,6 +332,46 @@ public abstract class Either<L, R> {
         @Override
         public <R2> Either<L, R2> flatMapRight(Function<R, Either<L, R2>> transformRight) {
             return transformRight.apply(rightValue);
+        }
+
+        @Override
+        public L getLeftOrElse(L other) {
+            return other;
+        }
+
+        @Override
+        public L getLeftOrElse(Supplier<L> otherSupplier) {
+            return otherSupplier.get();
+        }
+
+        @Override
+        public <X extends Throwable> L getLeftOrElseThrow(Function<R, X> exceptionFunction) throws X {
+            throw exceptionFunction.apply(rightValue);
+        }
+
+        @Override
+        public <X extends Throwable> L getLeftOrElseThrow(Supplier<X> exceptionSupplier) throws X {
+            throw exceptionSupplier.get();
+        }
+
+        @Override
+        public R getRightOrElse(R other) {
+            return rightValue;
+        }
+
+        @Override
+        public R getRightOrElse(Supplier<R> otherSupplier) {
+            return rightValue;
+        }
+
+        @Override
+        public <X extends Throwable> R getRightOrElseThrow(Function<L, X> exceptionFunction) throws X {
+            return rightValue;
+        }
+
+        @Override
+        public <X extends Throwable> R getRightOrElseThrow(Supplier<X> exceptionSupplier) throws X {
+            return rightValue;
         }
 
 
