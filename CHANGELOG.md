@@ -1,3 +1,9 @@
+2.3.0
+-----
+ * Add `flatMap` to Either
+ * Add javadocs to Either
+ * Refactor some tests
+
 2.2.1
 -----
  * Drop gradle, switch to maven for builds. Gradle is a hassle.

@@ -87,6 +87,62 @@ public class EitherTest {
             assertThat(result.getLeft()).isEqualTo("TEST");
         }
         @Test
+        public void executesLeftTransformation_whenMappedLeft(){
+            Either<String, Integer> leftOnly = Either.left("test");
+
+            Either<String, Integer> result = leftOnly.mapLeft(
+                (leftSide) -> leftSide.toUpperCase()
+            );
+
+            assertThat(result).isInstanceOf(Either.Left.class);
+            assertThat(result.getLeft()).isEqualTo("TEST");
+        }
+        @Test
+        public void noOps_whenMappedRight(){
+            Either<String, Integer> leftOnly = Either.left("test");
+
+            Either<String, Integer> result = leftOnly.mapRight(
+                (rightSide) -> rightSide * 2
+            );
+
+            assertThat(result).isInstanceOf(Either.Left.class);
+            assertThat(result.getLeft()).isEqualTo("test");
+        }
+		@Test
+		public void executesLeftTransformationAndUnwraps_whenFlatMapped(){
+            Either<String, Integer> leftOnly = Either.left("test");
+
+            Either<String, Integer> result = leftOnly.flatMap(
+                (leftSide) -> Either.left(leftSide.toUpperCase()),
+                (rightSide) -> Either.right(rightSide * 2)
+            );
+
+            assertThat(result).isInstanceOf(Either.Left.class);
+            assertThat(result.getLeft()).isEqualTo("TEST");
+		}
+		@Test
+		public void executesLeftTransformationAndUnwraps_whenFlatMappedLeft(){
+            Either<String, Integer> leftOnly = Either.left("test");
+
+            Either<String, Integer> result = leftOnly.flatMapLeft(
+                (leftSide) -> Either.left(leftSide.toUpperCase())
+            );
+
+            assertThat(result).isInstanceOf(Either.Left.class);
+            assertThat(result.getLeft()).isEqualTo("TEST");
+		}
+		@Test
+		public void noOps_whenFlatMappedRight(){
+            Either<String, Integer> leftOnly = Either.left("test");
+
+            Either<String, Integer> result = leftOnly.flatMapRight(
+                (rightSide) -> Either.right(rightSide * 2)
+            );
+
+            assertThat(result).isInstanceOf(Either.Left.class);
+            assertThat(result.getLeft()).isEqualTo("test");
+		}
+        @Test
         public void runsLeftConsumer_WhenRunIsCalled(){
             Either<String, Integer> leftOnly = Either.left("test");
             WrapperAroundBoolean leftHasBeenRun = new WrapperAroundBoolean(false);
@@ -186,6 +242,62 @@ public class EitherTest {
             assertThat(result.getRight()).isEqualTo(42*2);
         }
         @Test
+        public void executesRightTransformation_whenMappedRight(){
+            Either<String, Integer> rightOnly = Either.right(42);
+
+            Either<String, Integer> result = rightOnly.mapRight(
+                (rightSide) -> rightSide * 2
+            );
+
+            assertThat(result).isInstanceOf(Either.Right.class);
+            assertThat(result.getRight()).isEqualTo(42*2);
+        }
+        @Test
+        public void noOps_whenMappedLeft(){
+            Either<String, Integer> rightOnly = Either.right(42);
+
+            Either<String, Integer> result = rightOnly.mapLeft(
+                (leftSide) -> leftSide.toUpperCase()
+            );
+
+            assertThat(result).isInstanceOf(Either.Right.class);
+            assertThat(result.getRight()).isEqualTo(42);
+        }
+        @Test
+        public void executesRightTransformationAndUnwraps_whenFlatMapped(){
+            Either<String, Integer> rightOnly = Either.right(42);
+
+            Either<String, Integer> result = rightOnly.flatMap(
+                (leftSide) -> Either.left(leftSide.toUpperCase()),
+                (rightSide) -> Either.right(rightSide * 2)
+            );
+
+            assertThat(result).isInstanceOf(Either.Right.class);
+            assertThat(result.getRight()).isEqualTo(42*2);
+        }
+        @Test
+        public void executesRightTransformationAndUnwraps_whenFlatMappedRight(){
+            Either<String, Integer> rightOnly = Either.right(42);
+
+            Either<String, Integer> result = rightOnly.flatMapRight(
+                (rightSide) -> Either.right(rightSide * 2)
+            );
+
+            assertThat(result).isInstanceOf(Either.Right.class);
+            assertThat(result.getRight()).isEqualTo(42*2);
+        }
+        @Test
+        public void noOps_whenFlatMappedLeft(){
+            Either<String, Integer> rightOnly = Either.right(42);
+
+            Either<String, Integer> result = rightOnly.flatMapLeft(
+                (leftSide) -> Either.left(leftSide.toUpperCase())
+            );
+
+            assertThat(result).isInstanceOf(Either.Right.class);
+            assertThat(result.getRight()).isEqualTo(42);
+        }
+        @Test
         public void runsRightConsumer_WhenRunIsCalled(){
             Either<String, Integer> rightOnly = Either.right(42);
             WrapperAroundBoolean rightHasBeenRun = new WrapperAroundBoolean(false);
@@ -223,66 +335,6 @@ public class EitherTest {
             Either<String, Integer> rightOnly = Either.right(42);
 
             assertThat(rightOnly.hashCode()).isEqualTo(rightOnly.getRight().hashCode());
-        }
-    }
-
-    @Nested
-    @DisplayName("mapRight.and.flatMapRight")
-    public class MapRightTest{
-
-        @Test
-        void mapRightExample() {
-
-            Either<Error, Final> either = eitherStep1(new Request())
-                    .flatMapRight(intermediate -> intermediate.isValid() ?
-                            Either.right(new PreFinal()) : Either.left(new Error("Intermediate is not valid")))
-                    .mapRight(preFinal -> new Final());
-        }
-
-        @Test
-        void mapRightResultEquivalent() {
-
-            Result<Final> result = Result.attempt(() -> step1(new Request()))
-                    .map(intermediate -> intermediate.isValid() ?
-                            Either.right(new PreFinal()) : Either.left(new Error("Intermediate is not valid")))
-                    .map(preFinal -> new Final());
-        }
-
-
-
-        Either<Error, Intermediate> eitherStep1(Request request) {
-            return request.isValid() ? Either.right(new Intermediate()) : Either.left(new Error("Request is not valid"));
-        }
-
-        Intermediate step1(Request request) throws Exception {
-            if (request.isValid()) {
-                return new Intermediate();
-            } else {
-                throw new Exception("Request is not valid");
-            }
-        }
-
-        class Request {
-            boolean isValid() {
-                return true;
-            }
-        }
-
-        class Intermediate {
-            boolean isValid() {
-                return true;
-            }
-        }
-
-        class PreFinal { }
-
-        class Final { }
-
-        class Error {
-            String desc;
-            Error(String desc) {
-                this.desc = desc;
-            }
         }
     }
 
