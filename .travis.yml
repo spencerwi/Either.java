@@ -10,4 +10,4 @@ env:
   - ORG_GRADLE_PROJECT_isTravis=true
 
 script:
-    - ./gradlew build --scan -s
+    - mvn clean test

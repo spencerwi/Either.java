@@ -1,3 +1,7 @@
+2.2.1
+-----
+ * Drop gradle, switch to maven for builds. Gradle is a hassle.
+
 2.2.0
 -----
  * Add `mapLeft`, `mapRight`, `flatMapLeft`, and `flatMapRight` to `Either` (thanks, michaldo!)

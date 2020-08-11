@@ -1,4 +1,7 @@
 # Created by .gitignore support plugin (hsz.mobi)
+
+/target/
+
 ### Gradle template
 .gradle
 build/
