@@ -96,6 +96,31 @@ public class ResultTest {
             assertThat(result).isInstanceOf(Result.Err.class);
             assertThat(result.getException()).hasMessageContaining("Error! Failed!");
         }
+		@Test
+		public void doesNotExecuteConsumer_whenIfOkIsCalled(){
+            Result<Integer> errOnly = Result.err(new Exception("Error! Failed!"));
+			BooleanWrapper wasClosureCalled = new BooleanWrapper(false);
+
+			errOnly.ifOk(x -> {
+				wasClosureCalled.value = true;
+			});
+
+			assertThat(wasClosureCalled.value).isFalse();
+		}
+		@Test
+		public void executesErrHandler_whenRunIsCalled(){
+            Result<Integer> errOnly = Result.err(new Exception("Error! Failed!"));
+			BooleanWrapper wasErrHandlerCalled = new BooleanWrapper(false);
+			BooleanWrapper wasOkHandlerCalled = new BooleanWrapper(false);
+
+			errOnly.run(
+					err -> { wasErrHandlerCalled.value = true; },
+					err -> { wasOkHandlerCalled.value = true; }
+			);
+
+			assertThat(wasErrHandlerCalled.value).isTrue();
+			assertThat(wasOkHandlerCalled.value).isFalse();
+		}
         @Test
         public void isEqualToOtherErrsHavingTheSameErrValue(){
             Exception ex = new Exception("Test");
@@ -190,6 +215,31 @@ public class ResultTest {
             assertThat(okTimes2).isInstanceOf(Result.Ok.class);
             assertThat(okTimes2.getResult()).isEqualTo(42*2);
         }
+		@Test
+		public void executesConsumer_whenIfOkIsCalled(){
+            Result<Integer> ok = Result.ok(42);
+			BooleanWrapper wasClosureCalled = new BooleanWrapper(false);
+
+			ok.ifOk(x -> {
+				wasClosureCalled.value = true;
+			});
+
+			assertThat(wasClosureCalled.value).isTrue();
+		}
+		@Test
+		public void executesOkHandler_whenRunIsCalled(){
+            Result<Integer> ok = Result.ok(42);
+			BooleanWrapper wasErrHandlerCalled = new BooleanWrapper(false);
+			BooleanWrapper wasOkHandlerCalled = new BooleanWrapper(false);
+
+			ok.run(
+					err -> { wasErrHandlerCalled.value = true; },
+					err -> { wasOkHandlerCalled.value = true; }
+			);
+
+			assertThat(wasOkHandlerCalled.value).isTrue();
+			assertThat(wasErrHandlerCalled.value).isFalse();
+		}
         @Test
         public void isEqualToOtherOksHavingTheSameResultValue(){
             Result<Integer> resultIs42     = Result.ok(42);
@@ -225,4 +275,15 @@ public class ResultTest {
             assertThat(result.getException()).isInstanceOf(NullPointerException.class);
         }
     }
+
+	/**
+	 * A boolean-wrapper class with a single field that can be modified inside 
+	 * a closure, allowing us to test things like "was this closure called?"
+	 * */
+	private class BooleanWrapper {
+		public Boolean value;
+		public BooleanWrapper(Boolean value) {
+			this.value = value;
+		}
+	}
 }

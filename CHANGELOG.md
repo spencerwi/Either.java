@@ -1,3 +1,8 @@
+2.4.0
+-----
+ * Add `ifOk` and `run` to `Result`
+ * Add javadocs to `Result`
+
 2.3.0
 -----
  * Add `flatMap` to Either
