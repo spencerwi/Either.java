@@ -1,7 +1,7 @@
 Either.java
 ===========
 
-[![Build Status](https://travis-ci.org/spencerwi/Either.java.svg?branch=master)](https://travis-ci.org/spencerwi/Either.java)
+![Java CI with Maven](https://github.com/spencerwi/Either.java/workflows/Java%20CI%20with%20Maven/badge.svg?branch=master)
 
 A right-biased implementation of Haskell's `Either a b` for Java, using Java 8 for mapping/folding and type inference. 
 
