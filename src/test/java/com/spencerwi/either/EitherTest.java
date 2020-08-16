@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class EitherTest {
 
@@ -338,8 +339,47 @@ public class EitherTest {
         }
     }
 
+    @Nested
+    @DisplayName("Either.OrElseThrow")
+    public class EitherOrElseTest {
+
+        @Test
+        void getLeftOrElseThrowWhenLeft() {
+            Either<String, Integer> leftEither = Either.left("foo");
+
+            assertThat(leftEither.getLeftOrElseThrow(() -> new RuntimeException("Int not accepted"))).isEqualTo("foo");
+        }
+
+        @Test
+        void getLeftOrElseThrowWhenRight() {
+            Either<String, Integer> rightEither = Either.right(1);
+
+            assertThatThrownBy(() -> rightEither.getLeftOrElseThrow(() -> new RuntimeException("String not accepted")))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessage("String not accepted");
+        }
+
+
+        @Test
+        void getRightOrElseThrowWhenLeft() {
+            Either<String, Integer> leftEither = Either.left("foo");
+
+            assertThatThrownBy(() -> leftEither.getRightOrElseThrow(() -> new RuntimeException("String not accepted")))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessage("String not accepted");
+        }
+
+        @Test
+        void getRightOrElseThrowWhenRight() {
+            Either<String, Integer> rightEither = Either.right(1);
+            assertThat(rightEither.getRightOrElseThrow(() -> new RuntimeException("Int not accepted"))).isEqualTo(1);
+        }
+    }
+
+
+
     public static class WrapperAroundBoolean {
-        private boolean value; 
+        private boolean value;
         public WrapperAroundBoolean(){ this.value = false; }
         public WrapperAroundBoolean(boolean value) { this.value = value; }
         public void set(boolean value){ this.value = value; }
