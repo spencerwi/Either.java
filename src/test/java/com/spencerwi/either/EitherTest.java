@@ -156,6 +156,20 @@ public class EitherTest {
             assertThat(leftHasBeenRun.get()).isEqualTo(true);
         }
         @Test
+        void returnsValue_when_getLeftOrElseThrow() {
+            Either<String, Integer> leftEither = Either.left("foo");
+
+            assertThat(leftEither.getLeftOrElseThrow(() -> new RuntimeException("Int not accepted"))).isEqualTo("foo");
+        }
+        @Test
+        void throwsSuppliedException_when_getRightOrElseThrow() {
+            Either<String, Integer> leftEither = Either.left("foo");
+
+            assertThatThrownBy(() -> leftEither.getRightOrElseThrow(() -> new RuntimeException("String not accepted")))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessage("String not accepted");
+        }
+        @Test
         public void isEqualToOtherLeftsHavingTheSameLeftValue(){
             Either<String,Integer> leftIsTest = Either.left("test");
             Either<String,Object> leftIsAlsoTest = Either.left("test");
@@ -311,6 +325,19 @@ public class EitherTest {
             assertThat(rightHasBeenRun.get()).isEqualTo(true);
         }
         @Test
+        void returnsValue_when_getRightOrElseThrow() {
+            Either<String, Integer> rightEither = Either.right(1);
+            assertThat(rightEither.getRightOrElseThrow(() -> new RuntimeException("Int not accepted"))).isEqualTo(1);
+        }
+        @Test
+        void throwsSuppliedException_when_getLeftOrElseThrow() {
+            Either<String, Integer> rightEither = Either.right(1);
+
+            assertThatThrownBy(() -> rightEither.getLeftOrElseThrow(() -> new RuntimeException("String not accepted")))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessage("String not accepted");
+        }
+        @Test
         public void isEqualToOtherRightsHavingTheSameRightValue(){
             Either<String,Integer> rightIs42 = Either.right(42);
             Either<Object,Integer> rightIsAlso42 = Either.right(42);
@@ -338,45 +365,6 @@ public class EitherTest {
             assertThat(rightOnly.hashCode()).isEqualTo(rightOnly.getRight().hashCode());
         }
     }
-
-    @Nested
-    @DisplayName("Either.OrElseThrow")
-    public class EitherOrElseTest {
-
-        @Test
-        void getLeftOrElseThrowWhenLeft() {
-            Either<String, Integer> leftEither = Either.left("foo");
-
-            assertThat(leftEither.getLeftOrElseThrow(() -> new RuntimeException("Int not accepted"))).isEqualTo("foo");
-        }
-
-        @Test
-        void getLeftOrElseThrowWhenRight() {
-            Either<String, Integer> rightEither = Either.right(1);
-
-            assertThatThrownBy(() -> rightEither.getLeftOrElseThrow(() -> new RuntimeException("String not accepted")))
-                    .isInstanceOf(RuntimeException.class)
-                    .hasMessage("String not accepted");
-        }
-
-
-        @Test
-        void getRightOrElseThrowWhenLeft() {
-            Either<String, Integer> leftEither = Either.left("foo");
-
-            assertThatThrownBy(() -> leftEither.getRightOrElseThrow(() -> new RuntimeException("String not accepted")))
-                    .isInstanceOf(RuntimeException.class)
-                    .hasMessage("String not accepted");
-        }
-
-        @Test
-        void getRightOrElseThrowWhenRight() {
-            Either<String, Integer> rightEither = Either.right(1);
-            assertThat(rightEither.getRightOrElseThrow(() -> new RuntimeException("Int not accepted"))).isEqualTo(1);
-        }
-    }
-
-
 
     public static class WrapperAroundBoolean {
         private boolean value;

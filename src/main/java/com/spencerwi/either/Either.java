@@ -156,8 +156,22 @@ public abstract class Either<L, R> {
 	 */
     public abstract <R2> Either<L, R2> flatMapRight(Function<R, Either<L,R2>> transformRight);
 
+	/**
+	 * Returns the left-side value if this is a Left; otherwise throws the 
+	 *  exception supplied by `exceptionSupplier`.
+	 * @param exceptionSupplier a Supplier that returns a Throwable that will be thrown if this is a Right.
+	 * @return the left-side value if this is a Left.
+	 * @throws X if this is a Right.
+	 */
     public abstract <X extends Throwable> L getLeftOrElseThrow(Supplier<X> exceptionSupplier) throws X;
 
+	/**
+	 * Returns the right-side value if this is a Right; otherwise throws the 
+	 *  exception supplied by `exceptionSupplier`.
+	 * @param exceptionSupplier a Supplier that returns a Throwable that will be thrown if this is a Left.
+	 * @return the right-side value if this is a Right.
+	 * @throws X if this is a Left.
+	 */
     public abstract <X extends Throwable> R getRightOrElseThrow(Supplier<X> exceptionSupplier) throws X;
 
     public static class Left<L,R> extends Either<L, R> {

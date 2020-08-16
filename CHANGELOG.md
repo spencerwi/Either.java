@@ -1,3 +1,7 @@
+2.5.0
+-----
+ * Add `getLeftOrElseThrow` and `getRightOrElseThrow` to Either (thanks, michaldo!)
+
 2.4.0
 -----
  * Add `ifOk` and `run` to `Result`
