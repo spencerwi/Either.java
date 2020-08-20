@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@DisplayName("Either with Java")
 public class EitherTest {
 
     @Test

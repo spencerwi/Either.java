@@ -10,7 +10,7 @@ import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@DisplayName("Result with Java")
 public class ResultTest {
 
     @Test
