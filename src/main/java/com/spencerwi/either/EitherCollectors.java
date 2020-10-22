@@ -7,13 +7,33 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
+/**
+ * These collectors collect a stream of Either<L,R> objects to an
+ * Either<List<L>, List<R>> object.
+ *
+ * The left biased collector will produce a left Either if the stream is empty
+ * or contains at least one left Either objects.
+ *
+ * The right biased collector will produce a right Either if the stream is empty
+ * or contains at least one right Either objects.
+ *
+ * @param <L> the "left side" type.
+ * @param <R> the "right side type.
+ */
+
 public class EitherCollectors<L,R> implements Collector< Either<L,R>, EitherCollectors.EitherAccumulator<L,R>, Either<List<L>, List<R>> > {
     private final boolean leftBiased;
 
+    /**
+    * Factory method for creating a left biased collector
+    */
     public static <L,R> Collector<Either<L,R>, ?, Either<List<L>, List<R>>> toLeftBiasedList() {
         return new EitherCollectors<>(true);
     }
 
+    /**
+     * Factory method for creating a right biased collector
+     */
     public static <L,R> Collector<Either<L,R>, ?, Either<List<L>, List<R>>> toRightBiasedList() {
         return new EitherCollectors<>(false);
     }
@@ -70,9 +90,9 @@ public class EitherCollectors<L,R> implements Collector< Either<L,R>, EitherColl
 
         Either<List<L>, List<R>> finisher() {
             if(leftBiased) {
-                return !lefts.isEmpty() ? Either.left(lefts) : Either.right(rights);
+                return !lefts.isEmpty() || rights.isEmpty()  ? Either.left(lefts) : Either.right(rights);
             } else {
-                return !rights.isEmpty() ? Either.right(rights) : Either.left(lefts);
+                return !rights.isEmpty() || lefts.isEmpty() ? Either.right(rights) : Either.left(lefts);
             }
         }
     }
