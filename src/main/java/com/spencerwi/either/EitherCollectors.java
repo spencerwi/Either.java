@@ -8,14 +8,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 /**
- * These collectors collect a stream of Either<L,R> objects to an
- * Either<List<L>, List<R>> object.
- *
- * The left biased collector will produce a left Either if the stream is empty
- * or contains at least one left Either objects.
- *
- * The right biased collector will produce a right Either if the stream is empty
- * or contains at least one right Either objects.
+ * These collectors collect a stream of Either<L,R> objects to an Either<List<L>, List<R>> object.
  *
  * @param <L> the "left side" type.
  * @param <R> the "right side type.
@@ -25,16 +18,24 @@ public class EitherCollectors<L,R> implements Collector< Either<L,R>, EitherColl
     private final boolean leftBiased;
 
     /**
-    * Factory method for creating a left biased collector
-    */
-    public static <L,R> Collector<Either<L,R>, ?, Either<List<L>, List<R>>> toLeftBiasedList() {
+     * Factory method for creating a left biased collector which produces an Either<List<L>, List<R>> object,
+     * where the list contains all the left or right Either values of the stream.
+     * Since this is a left biased collector, the resulting Either is left iff the stream is empty or contains
+     * at least one left Either object.
+     * @return Either<List<L>, List<R>>
+     */
+    public static <L,R> Collector<Either<L,R>, ?, Either<List<L>, List<R>>> toLeftBiased() {
         return new EitherCollectors<>(true);
     }
 
     /**
-     * Factory method for creating a right biased collector
+     * Factory method for creating a right biased collector which produces an Either<List<L>, List<R>> object,
+     * where the list contains all the left or right Either values of the stream.
+     * Since this is a right biased collector, the resulting Either is right iff the stream is empty or contains
+     * at least one right Either object.
+     * @return Either<List<L>, List<R>>
      */
-    public static <L,R> Collector<Either<L,R>, ?, Either<List<L>, List<R>>> toRightBiasedList() {
+    public static <L,R> Collector<Either<L,R>, ?, Either<List<L>, List<R>>> toRightBiased() {
         return new EitherCollectors<>(false);
     }
 
