@@ -1,3 +1,7 @@
+2.6.0
+-----
+ * Add `EitherCollectors` with `.toLeftBiased()` and `.toRightBiased()` (thanks, peterunold!)
+
 2.5.0
 -----
  * Add `getLeftOrElseThrow` and `getRightOrElseThrow` to Either (thanks, michaldo!)
