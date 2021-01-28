@@ -163,12 +163,26 @@ public class EitherTest {
             assertThat(leftEither.getLeftOrElseThrow(() -> new RuntimeException("Int not accepted"))).isEqualTo("foo");
         }
         @Test
+        void returnsValue_when_getLeftOrElseThrowWithRightFunction() {
+            Either<String, Integer> leftEither = Either.left("foo");
+
+            assertThat(leftEither.getLeftOrElseThrow(i -> new RuntimeException("Int not accepted " + i))).isEqualTo("foo");
+        }
+        @Test
         void throwsSuppliedException_when_getRightOrElseThrow() {
             Either<String, Integer> leftEither = Either.left("foo");
 
             assertThatThrownBy(() -> leftEither.getRightOrElseThrow(() -> new RuntimeException("String not accepted")))
                     .isInstanceOf(RuntimeException.class)
                     .hasMessage("String not accepted");
+        }
+        @Test
+        void throwsTransformedLeftException_when_getRightOrElseThrow() {
+            Either<String, Integer> leftEither = Either.left("foo");
+
+            assertThatThrownBy(() -> leftEither.getRightOrElseThrow(s -> new RuntimeException("String not accepted " + s)))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("String not accepted foo");
         }
         @Test
         public void isEqualToOtherLeftsHavingTheSameLeftValue(){
@@ -331,12 +345,25 @@ public class EitherTest {
             assertThat(rightEither.getRightOrElseThrow(() -> new RuntimeException("Int not accepted"))).isEqualTo(1);
         }
         @Test
+        void returnsValue_when_getRightOrElseThrowWithLeftFunction() {
+            Either<String, Integer> rightEither = Either.right(1);
+            assertThat(rightEither.getRightOrElseThrow(s -> new RuntimeException("Int not accepted " + s))).isEqualTo(1);
+        }
+        @Test
         void throwsSuppliedException_when_getLeftOrElseThrow() {
             Either<String, Integer> rightEither = Either.right(1);
 
             assertThatThrownBy(() -> rightEither.getLeftOrElseThrow(() -> new RuntimeException("String not accepted")))
                     .isInstanceOf(RuntimeException.class)
                     .hasMessage("String not accepted");
+        }
+        @Test
+        void throwsTransformedRightException_when_getLeftOrElseThrow() {
+            Either<String, Integer> rightEither = Either.right(1);
+
+            assertThatThrownBy(() -> rightEither.getLeftOrElseThrow(s -> new RuntimeException("String not accepted " + s)))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("String not accepted 1");
         }
         @Test
         public void isEqualToOtherRightsHavingTheSameRightValue(){

@@ -166,6 +166,15 @@ public abstract class Either<L, R> {
     public abstract <X extends Throwable> L getLeftOrElseThrow(Supplier<X> exceptionSupplier) throws X;
 
 	/**
+	 * Returns the left-side value if this is a Left; otherwise throws the
+	 *  exception which is a result of transforming Right by `rightToException`.
+	 * @param rightToException a Function that gets Right and returns a Throwable that will be thrown if this is a Right.
+	 * @return the left-side value if this is a Left.
+	 * @throws X if this is a Right.
+	 */
+	public abstract <X extends Throwable> L getLeftOrElseThrow(Function<R, X> rightToException) throws X;
+
+	/**
 	 * Returns the right-side value if this is a Right; otherwise throws the 
 	 *  exception supplied by `exceptionSupplier`.
 	 * @param exceptionSupplier a Supplier that returns a Throwable that will be thrown if this is a Left.
@@ -173,6 +182,15 @@ public abstract class Either<L, R> {
 	 * @throws X if this is a Left.
 	 */
     public abstract <X extends Throwable> R getRightOrElseThrow(Supplier<X> exceptionSupplier) throws X;
+
+	/**
+	 * Returns the right-side value if this is a Right; otherwise throws the
+	 *  exception which is a result of transforming Left by `leftToException`.
+	 * @param leftToException a Function that gets Left and returns a Throwable that will be thrown if this is a Left.
+	 * @return the right-side value if this is a Right.
+	 * @throws X if this is a Left.
+	 */
+	public abstract <X extends Throwable> R getRightOrElseThrow(Function<L,X> leftToException) throws X;
 
     public static class Left<L,R> extends Either<L, R> {
 
@@ -230,13 +248,23 @@ public abstract class Either<L, R> {
             return leftValue;
         }
 
-        @Override
+		@Override
+		public <X extends Throwable> L getLeftOrElseThrow(Function<R, X> rightToException) throws X {
+			return leftValue;
+		}
+
+		@Override
         public <X extends Throwable> R getRightOrElseThrow(Supplier<X> exceptionSupplier) throws X {
             throw exceptionSupplier.get();
         }
 
+		@Override
+		public <X extends Throwable> R getRightOrElseThrow(Function<L, X> leftToException) throws X {
+			throw leftToException.apply(leftValue);
+		}
 
-        @Override
+
+		@Override
         public int hashCode(){ return this.leftValue.hashCode(); }
 
 		/**
@@ -311,14 +339,24 @@ public abstract class Either<L, R> {
             throw exceptionSupplier.get();
         }
 
+		@Override
+		public <X extends Throwable> L getLeftOrElseThrow(Function<R, X> rightToException) throws X {
+			throw rightToException.apply(rightValue);
+		}
 
-        @Override
+
+		@Override
         public <X extends Throwable> R getRightOrElseThrow(Supplier<X> exceptionSupplier) throws X {
             return rightValue;
         }
 
+		@Override
+		public <X extends Throwable> R getRightOrElseThrow(Function<L, X> leftToException) throws X {
+			return rightValue;
+		}
 
-        @Override
+
+		@Override
         public int hashCode(){ return this.rightValue.hashCode(); }
 
 		/**
