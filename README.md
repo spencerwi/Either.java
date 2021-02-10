@@ -121,6 +121,6 @@ Simple! It's in Maven Central, so just add this to your pomfile (or the equivale
 <dependency>
     <groupId>com.spencerwi</groupId>
     <artifactId>Either.java</artifactId>
-    <version>2.6.0</version>
+    <version>2.7.0</version>
 </dependency>
 ```

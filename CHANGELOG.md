@@ -1,3 +1,7 @@
+2.7.0
+-----
+ * Add `.getLeftOrElseThrow(Function<R, Exception>)` and `.getRightOrElseThrow(Function<L, Exception>)` (thanks, jartysiewicz!)
+
 2.6.0
 -----
  * Add `EitherCollectors` with `.toLeftBiased()` and `.toRightBiased()` (thanks, peterunold!)
