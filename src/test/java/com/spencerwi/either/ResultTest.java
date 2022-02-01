@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -73,6 +74,13 @@ public class ResultTest {
             Integer result = Result.attempt(() -> 1 / 0).getOrElse(0);
 
             assertThat(result).isEqualTo(0);
+        }
+
+        @Test
+        public void returnsEmptyOptional_whenToOptional(){
+            Optional<Object> optional = Result.err(new RuntimeException()).toOptional();
+
+            assertThat(optional).isEmpty();
         }
 
         @Test
@@ -209,6 +217,13 @@ public class ResultTest {
             Integer result = Result.attempt(() -> 8/2).getOrElse(0);
 
             assertThat(result).isEqualTo(4);
+        }
+
+        @Test
+        public void returnsNonEmptyOptional_whenToOptional(){
+            Optional<Integer> optional = Result.ok(1).toOptional();
+
+            assertThat(optional.orElse(0)).isEqualTo(1);
         }
 
         @Test

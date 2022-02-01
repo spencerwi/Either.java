@@ -1,6 +1,7 @@
 package com.spencerwi.either;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -63,6 +64,16 @@ public abstract class Result<R> {
         return fold(
             exception -> other,
             Function.identity()
+        );
+    }
+
+    /**
+     * @return the result as an Optional.
+     */
+    public Optional<R> toOptional() {
+        return fold(
+            exception -> Optional.empty(),
+            Optional::ofNullable
         );
     }
 
