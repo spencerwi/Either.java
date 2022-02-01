@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("Result with Java")
 public class ResultTest {
@@ -128,6 +129,16 @@ public class ResultTest {
 			assertThat(wasErrHandlerCalled.value).isTrue();
 			assertThat(wasOkHandlerCalled.value).isFalse();
 		}
+        @Test
+        void throwsSuppliedException_when_getOrElseThrow() {
+            Result<String> err = Result.err(new RuntimeException());
+
+            assertThatThrownBy(() -> err.getOrElseThrow(() -> new RuntimeException("Int not accepted")))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessage("Int not accepted");
+        }
+
+
         @Test
         public void isEqualToOtherErrsHavingTheSameErrValue(){
             Exception ex = new Exception("Test");
@@ -254,6 +265,11 @@ public class ResultTest {
 			assertThat(wasOkHandlerCalled.value).isTrue();
 			assertThat(wasErrHandlerCalled.value).isFalse();
 		}
+        @Test
+        void returnsValue_when_getOrElseThrow() {
+            Result<Integer> ok = Result.ok(1);
+            assertThat(ok.getOrElseThrow(() -> new RuntimeException("Int not accepted"))).isEqualTo(1);
+        }
         @Test
         public void isEqualToOtherOksHavingTheSameResultValue(){
             Result<Integer> resultIs42     = Result.ok(42);
