@@ -68,6 +68,13 @@ public class ResultTest {
         }
 
         @Test
+        public void returnsOther_whenGetOrElsed(){
+            Integer result = Result.attempt(() -> 1 / 0).getOrElse(0);
+
+            assertThat(result).isEqualTo(0);
+        }
+
+        @Test
         public void executesErrTransformation_whenFolded(){
             Result<Integer> errOnly = Result.err(new Exception("Error! Failed!"));
 
@@ -184,6 +191,13 @@ public class ResultTest {
 
             assertThat(ok.isOk()).isTrue();
             assertThat(ok.isErr()).isFalse();
+        }
+
+        @Test
+        public void returnsValue_whenGetOrElsed(){
+            Integer result = Result.attempt(() -> 8/2).getOrElse(0);
+
+            assertThat(result).isEqualTo(4);
         }
 
         @Test

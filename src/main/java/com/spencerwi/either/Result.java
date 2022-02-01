@@ -55,6 +55,16 @@ public abstract class Result<R> {
 	 */
     public abstract R getResult();
 
+    /**
+     * @return the wrapped value if this is an `Ok`, otherwise, the supplied other value.
+     */
+    public R getOrElse(R other) {
+        return fold(
+            exception -> other,
+            Function.identity()
+        );
+    }
+
     public abstract boolean isErr();
     public abstract boolean isOk();
 
