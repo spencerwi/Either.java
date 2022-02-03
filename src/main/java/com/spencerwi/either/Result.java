@@ -1,8 +1,10 @@
 package com.spencerwi.either;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * A useful class to wrap operations that may throw exceptions and convert 
@@ -55,6 +57,26 @@ public abstract class Result<R> {
 	 */
     public abstract R getResult();
 
+    /**
+     * @return the wrapped value if this is an `Ok`, otherwise, the supplied other value.
+     */
+    public R getOrElse(R other) {
+        return fold(
+            exception -> other,
+            Function.identity()
+        );
+    }
+
+    /**
+     * @return the result as an Optional.
+     */
+    public Optional<R> toOptional() {
+        return fold(
+            exception -> Optional.empty(),
+            Optional::ofNullable
+        );
+    }
+
     public abstract boolean isErr();
     public abstract boolean isOk();
 
@@ -85,7 +107,16 @@ public abstract class Result<R> {
 	 */
     public abstract <T> Result<T> flatMap(ExceptionThrowingFunction<R, Result<T>> transformValue);
 
-	/**
+    /**
+     * Returns the wrapped value if this is an `Ok` ; otherwise throws
+     * the exception supplied by `exceptionSupplier`.
+     * @param exceptionSupplier a Supplier that returns a Throwable that will be thrown if this is an `Err`.
+     * @return the wrapped value if this is an `Ok`.
+     * @throws X if this is an `Err`.
+     */
+    public abstract <X extends Throwable> R getOrElseThrow(Supplier<X> exceptionSupplier) throws X;
+
+    /**
 	 * Runs the acceptsOkValue function if this is an `Ok` instead of an `Err`,
 	 * passing in the value that `Ok` wraps; otherwise, does nothing. Does not 
 	 * return a value. If you need to transform a `Result<T>`, use {@link #map}
@@ -130,7 +161,13 @@ public abstract class Result<R> {
         public <T> Result<T> flatMap(ExceptionThrowingFunction<R, Result<T>> transformValue) {
             return Result.<T>err(this.ex);
         }
-		@Override
+
+        @Override
+        public <X extends Throwable> R getOrElseThrow(Supplier<X> exceptionSupplier) throws X {
+            throw exceptionSupplier.get();
+        }
+
+        @Override
 		public void ifOk(Consumer<R> acceptsOkValue) { /* no-op */ }
 		@Override
 		public void run(Consumer<Exception> errorHandler, Consumer<R> okHandler) {
@@ -188,7 +225,13 @@ public abstract class Result<R> {
                 return new Err<T>(e);
             }
         }
-		@Override
+
+        @Override
+        public <X extends Throwable> R getOrElseThrow(Supplier<X> exceptionSupplier) throws X {
+            return resultValue;
+        }
+
+        @Override
 		public void ifOk(Consumer<R> acceptsOkValue) {
 			acceptsOkValue.accept(this.resultValue);
 		}

@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("Result with Java")
 public class ResultTest {
@@ -68,6 +70,20 @@ public class ResultTest {
         }
 
         @Test
+        public void returnsOther_whenGetOrElsed(){
+            Integer result = Result.attempt(() -> 1 / 0).getOrElse(0);
+
+            assertThat(result).isEqualTo(0);
+        }
+
+        @Test
+        public void returnsEmptyOptional_whenToOptional(){
+            Optional<Object> optional = Result.err(new RuntimeException()).toOptional();
+
+            assertThat(optional).isEmpty();
+        }
+
+        @Test
         public void executesErrTransformation_whenFolded(){
             Result<Integer> errOnly = Result.err(new Exception("Error! Failed!"));
 
@@ -121,6 +137,16 @@ public class ResultTest {
 			assertThat(wasErrHandlerCalled.value).isTrue();
 			assertThat(wasOkHandlerCalled.value).isFalse();
 		}
+        @Test
+        void throwsSuppliedException_when_getOrElseThrow() {
+            Result<String> err = Result.err(new RuntimeException());
+
+            assertThatThrownBy(() -> err.getOrElseThrow(() -> new RuntimeException("Int not accepted")))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessage("Int not accepted");
+        }
+
+
         @Test
         public void isEqualToOtherErrsHavingTheSameErrValue(){
             Exception ex = new Exception("Test");
@@ -187,6 +213,20 @@ public class ResultTest {
         }
 
         @Test
+        public void returnsValue_whenGetOrElsed(){
+            Integer result = Result.attempt(() -> 8/2).getOrElse(0);
+
+            assertThat(result).isEqualTo(4);
+        }
+
+        @Test
+        public void returnsNonEmptyOptional_whenToOptional(){
+            Optional<Integer> optional = Result.ok(1).toOptional();
+
+            assertThat(optional.orElse(0)).isEqualTo(1);
+        }
+
+        @Test
         public void executesResultTransformation_whenFolded(){
             Result<Integer> ok = Result.ok(42);
 
@@ -240,6 +280,11 @@ public class ResultTest {
 			assertThat(wasOkHandlerCalled.value).isTrue();
 			assertThat(wasErrHandlerCalled.value).isFalse();
 		}
+        @Test
+        void returnsValue_when_getOrElseThrow() {
+            Result<Integer> ok = Result.ok(1);
+            assertThat(ok.getOrElseThrow(() -> new RuntimeException("Int not accepted"))).isEqualTo(1);
+        }
         @Test
         public void isEqualToOtherOksHavingTheSameResultValue(){
             Result<Integer> resultIs42     = Result.ok(42);
