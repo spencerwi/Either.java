@@ -68,6 +68,16 @@ public abstract class Result<R> {
     }
 
     /**
+     * @return the wrapped value if this is an `Ok`, otherwise, the value supplied by `otherSupplier`.
+     */
+    public R getOrElse(Supplier<R> otherSupplier) {
+        return fold(
+                exception -> otherSupplier.get(),
+                Function.identity()
+        );
+    }
+
+    /**
      * @return the result as an Optional.
      */
     public Optional<R> toOptional() {
