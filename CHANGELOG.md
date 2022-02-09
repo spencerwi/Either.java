@@ -1,3 +1,7 @@
+2.9.0
+-----
+ * Add `.getOrElse(Supplier<T> valueSupplier)` to `Result<T>` (thanks, hamishwilson!)
+
 2.8.0
 -----
  * Add `.getOrElse(T value)`, `.getOrElseThrow(Supplier<X extends Throwable> supplier)`, and `.toOptional()` to `Result<T>` (thanks, hamishwilson!)
