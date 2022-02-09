@@ -70,10 +70,12 @@ public class ResultTest {
         }
 
         @Test
-        public void returnsOther_whenGetOrElsed(){
-            Integer result = Result.attempt(() -> 1 / 0).getOrElse(0);
+        public void returnsOther_whenGetOrElse(){
+            Integer result1 = Result.attempt(() -> 1 / 0).getOrElse(0);
+            Integer result2 = Result.attempt(() -> 1 / 0).getOrElse(() -> 0);
 
-            assertThat(result).isEqualTo(0);
+            assertThat(result1).isEqualTo(0);
+            assertThat(result2).isEqualTo(0);
         }
 
         @Test
@@ -213,10 +215,12 @@ public class ResultTest {
         }
 
         @Test
-        public void returnsValue_whenGetOrElsed(){
-            Integer result = Result.attempt(() -> 8/2).getOrElse(0);
+        public void returnsValue_whenGetOrElse(){
+            Integer result1 = Result.attempt(() -> 8/2).getOrElse(0);
+            Integer result2 = Result.attempt(() -> 8/2).getOrElse(() -> 0);
 
-            assertThat(result).isEqualTo(4);
+            assertThat(result1).isEqualTo(4);
+            assertThat(result2).isEqualTo(4);
         }
 
         @Test
